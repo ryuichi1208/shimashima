@@ -205,7 +205,7 @@ class Game {
         this.imageManager = new ImageManager();
         this.soundEffects = null; // 後で初期化
         this.colorCount = 4; // デフォルトは4色
-        this.useCustomImages = false; // デフォルトは画像を使用しない
+        this.useCustomImages = true; // デフォルトは画像を使用する
         this.isMobile = this.checkIfMobile();
         this.touchStartX = 0;
         this.touchStartY = 0;
@@ -1230,8 +1230,8 @@ window.addEventListener('DOMContentLoaded', async () => {
     game.colorCount = savedColorCount;
     document.getElementById('colors' + savedColorCount).checked = true;
     
-    // 画像使用設定を読み込み
-    const savedUseCustomImages = localStorage.getItem('useCustomImages') === 'true';
+    // 画像使用設定を読み込み（デフォルトはtrue）
+    const savedUseCustomImages = localStorage.getItem('useCustomImages') !== 'false';
     game.useCustomImages = savedUseCustomImages;
     document.getElementById('useCustomImages').checked = savedUseCustomImages;
     

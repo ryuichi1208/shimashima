@@ -1269,31 +1269,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     
     const bgmAvailable = await bgmManager.init();
     
-    // BGM初回確認ダイアログの処理
-    const bgmConfirmShown = localStorage.getItem('bgmConfirmShown');
-    if (!bgmConfirmShown && bgmAvailable) {
-        const dialog = document.getElementById('bgmConfirmDialog');
-        dialog.classList.remove('hidden');
-        
-        document.getElementById('bgmConfirmYes').addEventListener('click', () => {
-            localStorage.setItem('bgmConfirmShown', 'true');
-            localStorage.setItem('bgmEnabled', 'true');
-            dialog.classList.add('hidden');
-            // BGMを開始
-            bgmManager.play();
-            document.querySelector('.bgm-icon').textContent = '🔊';
-            document.querySelector('.bgm-text').textContent = 'BGM ON';
-        });
-        
-        document.getElementById('bgmConfirmNo').addEventListener('click', () => {
-            localStorage.setItem('bgmConfirmShown', 'true');
-            localStorage.setItem('bgmEnabled', 'false');
-            dialog.classList.add('hidden');
-            document.querySelector('.bgm-icon').textContent = '🔇';
-            document.querySelector('.bgm-text').textContent = 'BGM OFF';
-        });
-    }
-    
     // テーマ切り替え機能
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = themeToggle.querySelector('.theme-icon');
@@ -1343,17 +1318,17 @@ window.addEventListener('DOMContentLoaded', async () => {
         return;
     }
     
-    // ローカルストレージから保存されたBGM設定を読み込む
-    const savedBgmEnabled = localStorage.getItem('bgmEnabled') === 'true';
+    // ローカルストレージから保存されたBGM設定を読み込む（デフォルトはtrue）
+    const savedBgmEnabled = localStorage.getItem('bgmEnabled') !== 'false';
     const savedVolume = parseInt(localStorage.getItem('bgmVolume')) || 50;
-    
+
     volumeSlider.value = savedVolume;
     volumeValue.textContent = savedVolume + '%';
     bgmManager.setVolume(savedVolume);
     soundEffects.setVolume(savedVolume); // 効果音の初期音量も設定
-    
-    // 初期状態を設定（初回確認ダイアログを考慮）
-    if (savedBgmEnabled && bgmConfirmShown) {
+
+    // 初期状態を設定
+    if (savedBgmEnabled) {
         bgmIcon.textContent = '🔊';
         bgmText.textContent = 'BGM ON';
         // ユーザー操作後に自動再生を試みる
